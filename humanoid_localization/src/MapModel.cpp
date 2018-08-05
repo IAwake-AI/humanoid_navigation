@@ -23,6 +23,22 @@
 
 #include <humanoid_localization/MapModel.h>
 
+//#include <tf/transform_datatypes.h>
+
+#include <pcl/point_types.h>
+#include <pcl/conversions.h>
+#include <pcl_ros/transforms.h>
+#include <octomap_msgs/conversions.h>
+#include <octomap_msgs/GetOctomap.h>
+
+#include <octomap/octomap_types.h>
+
+ /// Conversion from tf::Point to octomap::point3d
+ static inline octomap::point3d pointTfToOctomap(const tf::Point& ptTf){
+    return octomap::point3d(ptTf.x(), ptTf.y(), ptTf.z());
+}
+
+
 namespace humanoid_localization{
 MapModel::MapModel(ros::NodeHandle* nh)
 : m_motionMeanZ(0.0),
@@ -300,7 +316,7 @@ bool OccupancyMap::isOccupied(octomap::OcTreeNode* node) const{
 
 double OccupancyMap::getFloorHeight(const tf::Transform& pose)const {
   octomap::point3d end;
-  if (m_map->castRay(octomap::pointTfToOctomap(pose.getOrigin()), octomap::point3d(0.0, 0.0, -1.0), end, false)){
+  if (m_map->castRay(pointTfToOctomap(pose.getOrigin()), octomap::point3d(0.0, 0.0, -1.0), end, false)){
     // add resolution/2 so height is above voxel boundary:
     return end.z()+m_map->getResolution()/2.0;
   } else {

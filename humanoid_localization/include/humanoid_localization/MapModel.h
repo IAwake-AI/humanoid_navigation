@@ -26,9 +26,8 @@
 
 #include <omp.h>
 #include <ros/ros.h>
-#include <octomap_msgs/conversions.h>
-#include <octomap_msgs/GetOctomap.h>
-#include <octomap_ros/conversions.h>
+
+#include <octomap/octomap.h>
 
 #include <humanoid_localization/humanoid_localization_defs.h>
 

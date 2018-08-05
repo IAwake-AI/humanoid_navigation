@@ -23,7 +23,15 @@
 #include <pcl/point_types.h>
 #include <pcl/conversions.h>
 #include <pcl_ros/transforms.h>
-#include <octomap_ros/conversions.h>
+#include <octomap_msgs/conversions.h>
+
+#include <octomap/octomap_types.h>
+
+
+ /// Conversion from tf::Point to octomap::point3d
+ static inline octomap::point3d pointTfToOctomap(const tf::Point& ptTf){
+    return octomap::point3d(ptTf.x(), ptTf.y(), ptTf.z());
+}
 
 namespace humanoid_localization{
 
@@ -135,8 +143,8 @@ void RaycastingModel::integrateMeasurement(Particles& particles, const PointClou
 
 bool RaycastingModel::getHeightError(const Particle& p, const tf::StampedTransform& footprintToBase, double& heightError) const{
 
-  octomap::point3d direction = octomap::pointTfToOctomap(footprintToBase.inverse().getOrigin());
-  octomap::point3d origin = octomap::pointTfToOctomap(p.pose.getOrigin());
+  octomap::point3d direction = pointTfToOctomap(footprintToBase.inverse().getOrigin());
+  octomap::point3d origin = pointTfToOctomap(p.pose.getOrigin());
   octomap::point3d end;
   // cast ray to bottom:
   if (!m_map->castRay(origin, direction, end, true, 2*direction.norm()))

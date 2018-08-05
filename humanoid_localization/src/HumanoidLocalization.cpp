@@ -20,7 +20,9 @@
 
 #include <humanoid_localization/HumanoidLocalization.h>
 #include <iostream>
-#include <pcl/keypoints/uniform_sampling.h>
+//#include <pcl/keypoints/uniform_sampling.h>
+
+#include <pcl/filters/uniform_sampling.h>
 
 #include <pcl_ros/transforms.h>
 
@@ -545,8 +547,9 @@ void HumanoidLocalization::prepareLaserPointCloud(const sensor_msgs::LaserScanCo
   cloudPtr.reset(new pcl::PointCloud<pcl::PointXYZ> (pc));
   uniformSampling.setInputCloud(cloudPtr);
   uniformSampling.setRadiusSearch(m_sensorSampleDist);
-  pcl::PointCloud<int> sampledIndices;
-  uniformSampling.compute(sampledIndices);
+  /*
+  pcl::PointCloud<pcl::PointXYZ>::Ptr sampledIndices;
+  uniformSampling.applyFilter(sampledIndices);
   pcl::copyPointCloud(*cloudPtr, sampledIndices.points, pc);
   // adjust "ranges" array to contain the same points:
   std::vector<float> rangesSparse;
@@ -555,6 +558,7 @@ void HumanoidLocalization::prepareLaserPointCloud(const sensor_msgs::LaserScanCo
     rangesSparse[i] = ranges[sampledIndices.points[i]];
   }
   ranges = rangesSparse;
+*/
   ROS_INFO("Laser PointCloud subsampled: %zu from %zu (%u out of valid range)", pc.size(), cloudPtr->size(), numBeamsSkipped);
 }
 
@@ -797,7 +801,10 @@ void HumanoidLocalization::voxelGridSampling(const PointCloud & pc, pcl::PointCl
    cloudPtr.reset(new pcl::PointCloud<pcl::PointXYZ> (pc)); // TODO: Check if this is a shallow copy..
    uniformSampling.setInputCloud(cloudPtr);
    uniformSampling.setRadiusSearch(search_radius);
-   uniformSampling.compute(sampledIndices);
+   /*
+   pcl::PointCloud<pcl::PointXYZ>::Ptr sampledIndices;
+   uniformSampling.applyFilter(sampledIndices);
+*/
 }
 
 void HumanoidLocalization::pointCloudCallback(const sensor_msgs::PointCloud2::ConstPtr& msg) {

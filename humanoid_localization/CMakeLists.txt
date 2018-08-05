@@ -14,11 +14,11 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   octomap_msgs
+  octomap_ros
   visualization_msgs
   cmake_modules
   tf
   message_filters
-  octomap_ros
   pcl_ros
   pcl_conversions
 )
@@ -26,6 +26,10 @@ find_package(catkin REQUIRED COMPONENTS
 find_package(Boost REQUIRED COMPONENTS random)
 find_package(Eigen3 REQUIRED)
 find_package(octomap REQUIRED)
+include_directories(${OCTOMAP_INCLUDE_DIRS})
+link_libraries(${OCTOMAP_LIBRARIES})
+link_directories(${OCTOMAP_LIBRARY_DIRS})
+
 
 # required for OpenMP
 find_package(OpenMP)
@@ -39,9 +43,9 @@ find_package(dynamicEDT3D)
 if (${dynamicEDT3D_FOUND})                                                                       
   include_directories(${DYNAMICEDT3D_INCLUDE_DIRS})
   link_directories(${DYNAMICEDT3D_LIBRARY_DIRS})
-  LINK_LIBRARIES(${OCTOMAP_LIBRARIES} ${DYNAMICEDT3D_LIBRARIES})
+  LINK_LIBRARIES(${DYNAMICEDT3D_LIBRARIES})
   list(APPEND LIBRARIES endpointmodel)
-else (${dynamicEDT3D_FOUND})
+else ()
   MESSAGE(WARNING "dynamicEDT3D library (part of OctoMap >1.5) not found, skipping endpoint model")
   add_definitions(-DSKIP_ENDPOINT_MODEL)
 endif (${dynamicEDT3D_FOUND})
@@ -75,7 +79,6 @@ catkin_package(
     cmake_modules
     tf
     message_filters
-    octomap_ros
     pcl_ros
     pcl_conversions
   DEPENDS Boost EIGEN3
