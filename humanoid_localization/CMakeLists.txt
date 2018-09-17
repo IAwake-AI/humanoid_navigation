@@ -14,7 +14,7 @@ find_package(catkin REQUIRED COMPONENTS
   sensor_msgs
   geometry_msgs
   octomap_msgs
-  octomap_ros
+  octomap
   visualization_msgs
   cmake_modules
   tf

@@ -62,7 +62,7 @@ catkin_package(
     angles
     gridmap_2d
     map_server
-  DEPENDS OpenCV SBPL
+  DEPENDS OpenCV
 )
 
 ################################################################################
@@ -72,7 +72,6 @@ include_directories(
   include
   ${catkin_INCLUDE_DIRS}
   ${OpenCV_INCLUDE_DIRS}
-  ${SBPL_INCLUDE_DIRS}
 )
 
 set(FOOTSTEP_PLANNER_FILES 
